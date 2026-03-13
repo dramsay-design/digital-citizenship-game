@@ -1,80 +1,857 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Digital Citizenship Game</title>
+<meta charset="UTF-8">
+<title>District Cyber Safety Training</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
-font-family: Arial;
-background: linear-gradient(135deg,#1e90ff,#90ee90);
-color:white;
-text-align:center;
-padding:40px;
+  font-family:"Segoe UI",Arial,sans-serif;
+  margin:0;
+  background:linear-gradient(135deg,#0f2e6d,#1f4fbf,#7edc8a);
+  min-height:100vh;
 }
 
 .container{
-background:white;
-color:black;
-padding:30px;
-border-radius:10px;
-max-width:800px;
-margin:auto;
+  max-width:1050px;
+  margin:auto;
+  padding:30px;
+}
+
+.card{
+  background:white;
+  border-radius:14px;
+  padding:35px;
+  box-shadow:0 14px 45px rgba(0,0,0,0.25);
+  margin-top:25px;
+}
+
+h1{color:#0f2e6d;margin-top:0}
+h2{color:#173b91}
+
+.sectionTitle{
+  border-bottom:3px solid #173b91;
+  padding-bottom:8px;
+  margin-bottom:20px;
 }
 
 button{
-background:#1e90ff;
-color:white;
-border:none;
-padding:15px 25px;
-font-size:18px;
-border-radius:8px;
-cursor:pointer;
+  padding:12px 22px;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  margin-right:8px;
+  margin-top:8px;
 }
 
-button:hover{
-background:#0c6ed5;
+.primary{
+  background:#173b91;
+  color:white;
+}
+
+.secondary{
+  background:#7edc8a;
+  color:#0f2e6d;
+}
+
+.progress{
+  height:14px;
+  background:#e3ebff;
+  border-radius:8px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.bar{
+  height:100%;
+  background:linear-gradient(90deg,#173b91,#7edc8a);
+  width:0%;
+}
+
+.hidden{display:none}
+
+.question{
+  border:1px solid #d7e1ff;
+  border-radius:10px;
+  padding:15px;
+  margin-top:18px;
+}
+
+.demoBox{
+  background:#f4f7ff;
+  border-left:6px solid #173b91;
+  padding:18px;
+  margin-top:15px;
+  border-radius:8px;
+}
+
+.emailExample{
+  background:#f8fbff;
+  border:1px solid #ccd7ff;
+  padding:15px;
+  font-family:monospace;
+  margin-top:10px;
+  white-space:pre-wrap;
+}
+
+.warning{
+  background:#fff8e8;
+  border-left:6px solid #e0a800;
+  padding:14px;
+  margin-top:10px;
+}
+
+.certificate{
+  border:5px solid gold;
+  padding:30px;
+  margin-top:25px;
+  text-align:center;
+  background:#fffdf4;
+}
+
+.credit{
+  text-align:center;
+  font-size:12px;
+  color:#5f6f95;
+  margin-top:18px;
+  letter-spacing:0.4px;
+}
+
+.multiOption{
+  display:block;
+  margin:8px 0;
+}
+
+.dragBank{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:12px;
+}
+
+.dragItem{
+  background:#e9f1ff;
+  border:1px solid #aac2ff;
+  border-radius:8px;
+  padding:10px 14px;
+  cursor:grab;
+  font-weight:600;
+}
+
+.dropZoneWrap{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  margin-top:16px;
+}
+
+.dropZone{
+  flex:1;
+  min-width:260px;
+  min-height:120px;
+  border:2px dashed #8aa8df;
+  border-radius:10px;
+  padding:14px;
+  background:#fafcff;
+}
+
+.dropZone h4{
+  margin-top:0;
+  color:#173b91;
+}
+
+.navButtons{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+@media print{
+  body{background:white}
+  .container{padding:0}
+  #start,#game,#results>h2,#scoreText{display:none}
+  .certificate{box-shadow:none;border:4px solid gold}
+  button{display:none}
 }
 </style>
-
 </head>
 
 <body>
-
 <div class="container">
 
-<h1>Digital Citizenship Interactive Game</h1>
+  <div id="start" class="card">
+    <h1>District Internet Safety & Phishing Awareness Training</h1>
 
-<p>
-Learn how to recognize phishing emails, protect your digital footprint,
-and practice responsible internet use through real-world scenarios.
-</p>
+    <p>This professional training module helps staff identify phishing emails, suspicious internet behavior, and understand how online actions create a digital footprint.</p>
 
-<br>
+    <p>Participants will move through realistic scenarios designed to strengthen judgment, increase awareness of online risks, and build confidence in recognizing misleading information, suspicious requests, and digital habits that can affect both personal security and professional reputation.</p>
 
-<input type="text" id="playerName" placeholder="Enter your name">
+    <input id="name" placeholder="Enter your name" style="padding:10px;font-size:16px;width:60%">
 
-<br><br>
+    <br><br>
 
-<button onclick="startGame()">Start Game</button>
+    <button class="primary" onclick="startGame()">Start Training</button>
+  </div>
+
+  <div id="game" class="card hidden">
+    <div class="progress">
+      <div id="bar" class="bar"></div>
+    </div>
+
+    <div id="content"></div>
+
+    <br>
+
+    <div class="navButtons">
+      <div>
+        <button class="secondary" onclick="prevSection()">Back</button>
+        <button class="primary" onclick="nextSection()">Continue</button>
+      </div>
+    </div>
+
+    <div class="credit">Created by DWRM. M.Ed G.St</div>
+  </div>
+
+  <div id="results" class="card hidden">
+    <h2>Training Results</h2>
+
+    <p id="scoreText"></p>
+
+    <div id="certificate" class="certificate hidden">
+      <button onclick="window.print()" style="float:right;background:#173b91;color:white;padding:8px 14px;border:none;border-radius:6px;cursor:pointer;margin-bottom:10px;">Print Certificate</button>
+
+      <h2>Certificate of Completion</h2>
+
+      <p>This certifies that</p>
+
+      <h2 id="certName"></h2>
+
+      <p>successfully completed District Internet Safety and Phishing Awareness Training</p>
+
+      <p id="date"></p>
+    </div>
+  </div>
 
 </div>
 
 <script>
+let section = 0
+let player = ""
+let answers = {}
+
+const sections = [
+
+{
+title:"Section 1: Using the Internet Responsibly",
+text:`
+
+<h2 class="sectionTitle">Using the Internet Responsibly</h2>
+
+<p>The internet is a powerful tool used by schools, governments, and organizations around the world. Teachers rely on it for communication, research, grading systems, and collaboration.</p>
+
+<p>However, not everything online is trustworthy. Misinformation spreads quickly on social media platforms and through reposted articles, screenshots, and videos.</p>
+
+<p>During the COVID-19 pandemic, news organizations including BBC News and The New York Times reported that false medical claims spread widely online. Many individuals shared misleading information without verifying it, which increased confusion and sometimes influenced unsafe decisions.</p>
+
+<p>This is important in school settings because staff members often receive information quickly through email, social media, screenshots, and group messages. When information is repeated several times, it can begin to feel true even when it has not been confirmed. Responsible internet use requires slowing down, checking the original source, and deciding whether the information is credible before reacting or sharing it with others.</p>
+
+<p>Another important idea in digital behavior is that actions taken online often leave a lasting record; this is called a digital footprint. Posts, comments, likes, shared articles, emails, and uploaded content can remain stored in systems, archives, or screenshots even after someone believes the original message has disappeared. Even small actions—such as reposting a rumor or forwarding an unverified message—can become part of that permanent online record and influence how others view your judgment and credibility.</p>
+
+<div class="demoBox">
+<b>Demonstration:</b>
+
+<p>Imagine a colleague shares a post in a staff group chat that says:</p>
+
+<div class="emailExample">"Scientists say drinking salt water cures COVID-19. Share this before it gets deleted."</div>
+
+<p>The message uses urgency, emotion, and vague authority. A responsible internet user would pause, verify the claim using trusted sources, and avoid spreading it until the information is confirmed.</p>
+</div>
+
+<div class="warning">
+<b>What to look for:</b>
+<ul>
+<li>Claims without named experts or credible sources</li>
+<li>Messages urging people to "share immediately"</li>
+<li>Health or science claims without evidence</li>
+<li>Information from unknown websites or screenshots with no original source</li>
+</ul>
+</div>
+`,
+questions:[
+{
+type:"single",
+q:"A teacher in your department posts a screenshot in the staff group chat claiming the district will cancel school for three days because of a severe cybersecurity attack. The screenshot has no source, but several coworkers begin sharing it quickly. What is the most responsible first step?",
+options:[
+"Check the district website or official district communication channels before sharing or reacting",
+"Forward the screenshot to your students so they can prepare",
+"Share it with your grade level team because the warning may be true",
+"Post it on social media and ask whether anyone else has heard about it"
+],
+answer:0
+},
+{
+type:"single",
+q:"You are researching a health topic for a school family night and find two articles. One is from a government public health website and one is from a blog that includes dramatic claims but no author credentials. Which choice best reflects responsible internet use?",
+options:[
+"Use the government public health site as the stronger source because it is more accountable and evidence-based",
+"Use the blog because emotional language makes people more likely to pay attention",
+"Use both sources equally because all websites deserve the same level of trust",
+"Use the blog first if it has been shared widely on social media"
+],
+answer:0
+},
+{
+type:"single",
+q:"Based on the reading above, which term describes the lasting record created by posts, comments, messages, and shared content online?",
+options:[
+"Digital footprint",
+"Temporary browsing history",
+"Private network identity",
+"Anonymous activity"
+],
+answer:0
+},
+{
+type:"single",
+q:"While creating a staff resource, you find a viral infographic with no author name, no publication date, and no source citations. The design looks polished and professional. What should you conclude before using it?",
+options:[
+"Professional appearance alone does not prove reliability; the information should be verified before it is used",
+"The infographic is trustworthy because polished visuals usually mean the information was reviewed",
+"It is safe to use because it supports the point you want to make",
+"It is reliable if at least one other person on social media has reposted it"
+],
+answer:0
+}
+]
+},
+
+{
+title:"Section 2: Phishing Emails and Internet Scams",
+text:`
+
+<h2 class="sectionTitle">Phishing Emails and Internet Scams</h2>
+
+<p>Phishing is a cyberattack where criminals send emails pretending to be trusted organizations in order to steal information such as passwords or financial details.</p>
+
+<p>Many phishing emails look professional and may include logos, urgent language, and topics such as payroll, benefits, HR, or account verification.</p>
+
+<p>District IT teams often warn staff about messages that appear legitimate on the surface but contain subtle warning signs, such as a suspicious sender domain, unexpected requests, unusual links, or pressure to act immediately.</p>
+
+<p>Phishing attacks are effective because they are designed to take advantage of routine workplace behavior. Staff members are used to responding quickly, reviewing forms, checking district systems, and opening messages related to payroll, benefits, or student communication. Attackers know this, so they often imitate ordinary school communication in order to lower a person's guard and push them into making a rushed decision.</p>
+
+<div class="demoBox">
+
+<b>Demonstration 1: Suspicious HR Email</b>
+
+<div class="emailExample">From: payroll-update@district-payroll-secure.com
+
+Subject: URGENT HR BENEFITS VERIFICATION
+
+Please confirm your benefits immediately using the secure link below.
+
+http://district-payroll-login.net</div>
+
+<p><b>What is wrong?</b></p>
+<ul>
+<li>The domain name does not match the official district domain.</li>
+<li>The message creates urgency to pressure quick action.</li>
+<li>The message directs staff to click an external link instead of logging into the official district portal.</li>
+</ul>
+
+<hr>
+
+<b>Demonstration 2: Message Appearing to Come from a Superintendent</b>
+
+<div class="emailExample">From: superintendent-office@vcschools-support.org
+
+Subject: Immediate Staff Action Required
+
+Hello Staff,
+
+Due to a security update, all employees must verify their email accounts today. Please open the attached document and confirm your password so the system can remain active.
+
+Failure to respond may result in account suspension.</div>
+
+<p><b>What is wrong?</b></p>
+<ul>
+<li>The sender domain is different from the district's official domain.</li>
+<li>Administrators rarely ask staff to verify passwords through email.</li>
+<li>The message creates fear of consequences to force quick compliance.</li>
+<li>Attachments requesting login credentials are a common phishing tactic.</li>
+</ul>
+
+<hr>
+
+<b>Demonstration 3: Bank Notification Email</b>
+
+<div class="emailExample">From: alerts@bank-security-update.net
+
+Subject: Suspicious Activity Detected
+
+We detected unusual activity on your account. Please confirm your banking details immediately using the secure link below to prevent account closure.
+
+http://bank-account-verification.net</div>
+
+<p><b>What is wrong?</b></p>
+<ul>
+<li>The link directs users to a domain unrelated to the official bank website.</li>
+<li>The message pressures the user to act quickly.</li>
+<li>Banks normally direct users to log in through their official website rather than an emailed link.</li>
+</ul>
+
+</div>
+
+<div class="warning">
+<b>Common phishing warning signs:</b>
+<ul>
+<li>Urgent messages demanding immediate action</li>
+<li>Email addresses that look slightly different from official ones</li>
+<li>Requests for passwords or login credentials</li>
+<li>Links that lead to unfamiliar websites</li>
+<li>Unexpected messages about HR, payroll, or benefits</li>
+</ul>
+</div>
+`,
+questions:[
+{
+type:"single",
+q:"You receive an email that appears to come from a student-style address using firstname.lastname, but the message asks you to review an urgent HR benefits change through an external link. The wording is polite and free of spelling errors. Which detail is the strongest reason to treat the email as suspicious?",
+options:[
+"The content does not match the sender identity and directs you to an unrelated HR action",
+"The email is written politely and sounds professional",
+"The email includes a subject line about benefits",
+"The message is short and easy to understand"
+],
+answer:0
+},
+{
+type:"single",
+q:"A message tells you your payroll access will be suspended by the end of the day unless you verify your login through the attached link. You were not expecting any payroll changes. What is the best response?",
+options:[
+"Do not click; contact payroll, IT, or HR using official contact information you already trust",
+"Click the link but avoid entering your password until the page loads fully",
+"Reply to the sender and ask whether the message is legitimate",
+"Forward the email to a coworker and ask them to test the link first"
+],
+answer:0
+},
+{
+type:"fill",
+q:"Phishing emails often try to create a sense of _______.",
+answer:"urgency"
+},
+{
+type:"single",
+q:"You hover over a link in a district-related email. The text says 'VCS Staff Portal,' but the preview shows a different domain ending in '.net' rather than the district's known website. What is the best interpretation?",
+options:[
+"The visible text may be misleading, so the actual destination should be treated as suspicious",
+"The link is probably safe because the display text mentions the staff portal",
+"The '.net' ending proves it is an alternate district backup site",
+"If the email includes a logo, the link can be trusted"
+],
+answer:0
+}
+]
+},
+
+{
+title:"Section 3: Social Media and Your Digital Footprint",
+text:`
+
+<h2 class="sectionTitle">Social Media and Your Digital Footprint</h2>
+
+<p>Every action taken online creates a digital footprint. This includes posts, comments, likes, messages, and photos. Even when content is deleted, copies may still exist through screenshots, archives, or stored data.</p>
+
+<p>Digital footprints can affect personal privacy, professional reputation, and future opportunities. Employers, colleges, scholarship committees, and community members may review online behavior when making judgments about a person's character or professionalism.</p>
+
+<p>For educators, digital footprints carry an added layer of responsibility because online conduct can shape how students, families, coworkers, and the broader community view professionalism and trustworthiness. A post made in frustration, even on a personal account, can sometimes be interpreted as a reflection of judgment, values, or workplace attitude once it is shared beyond the original audience.</p>
+
+<div class="demoBox">
+
+<b>Demonstration</b>
+
+<p>A teacher posts a frustrated comment late at night after a difficult day:</p>
+
+<div class="emailExample">"This school is terrible. I hate my job, and these parents are impossible."</div>
+
+<p>By morning, someone has taken a screenshot and shared it. Even if the original post is deleted, the image continues to circulate and shapes how others view the teacher.</p>
+
+</div>
+
+<div class="warning">
+<b>How to protect your digital footprint:</b>
+<ul>
+<li>Think carefully before posting</li>
+<li>Use privacy settings, but do not rely on them completely</li>
+<li>Avoid posting personal or professional conflicts online</li>
+<li>Assume anything posted may become public and permanent</li>
+</ul>
+</div>
+`,
+questions:[
+{
+type:"single",
+q:"A staff member posts a frustrated message about work on a personal account, then deletes it ten minutes later. The next day, a screenshot is circulating. What is the most important lesson from this situation?",
+options:[
+"Deleting a post does not guarantee the content is gone because others may save or share it",
+"The problem only matters if the account was public",
+"Screenshots are not credible, so the situation will likely fade on its own",
+"Private accounts prevent professional consequences"
+],
+answer:0
+},
+{
+type:"single",
+q:"You are about to comment on a controversial community issue from your personal account. The comment does not mention your school, but your profile clearly identifies where you work. Which choice shows the best professional judgment?",
+options:[
+"Pause and consider how the comment could be interpreted if shared beyond your intended audience",
+"Post immediately because personal accounts are always separate from professional identity",
+"Rely on privacy settings alone and assume only close contacts will see it",
+"Use stronger language so your position cannot be misunderstood"
+],
+answer:0
+},
+{
+type:"fill",
+q:"Even deleted posts may still exist in _______.",
+answer:"screenshots"
+},
+{
+type:"single",
+q:"An educator wants to build a positive digital footprint. Which action best supports that goal over time?",
+options:[
+"Sharing thoughtful, professional, and respectful content while avoiding impulsive posts",
+"Posting freely and deleting anything that later feels risky",
+"Assuming that likes and comments do not become part of an online record",
+"Keeping all accounts private and therefore not thinking about content choices"
+],
+answer:0
+}
+]
+},
+
+{
+title:"What Have We Learned?",
+text:`
+
+<h2 class="sectionTitle">What Have We Learned?</h2>
+
+<p>This final check asks you to apply what you learned across all three sections. Read carefully, think critically, and use the ideas from the training to decide which actions show strong digital judgment.</p>
+
+<div class="warning">
+<b>Directions:</b>
+<ul>
+<li>Some questions have <b>more than one correct answer</b>.</li>
+<li>One question uses <b>drag and drop</b>.</li>
+<li>Use the examples and warning signs from the training to guide your choices.</li>
+</ul>
+</div>
+`,
+questions:[
+{
+type:"drag",
+q:"Drag each action into the correct category.",
+items:[
+{text:"Verify a district message using official channels",target:"Safe Digital Behavior"},
+{text:"Click an urgent payroll link from an unfamiliar domain",target:"Unsafe Digital Behavior"},
+{text:"Pause before posting a frustrated public comment",target:"Safe Digital Behavior"},
+{text:"Assume deleted posts are gone forever",target:"Unsafe Digital Behavior"}
+],
+zones:["Safe Digital Behavior","Unsafe Digital Behavior"]
+},
+{
+type:"multi",
+q:"Select the two details that are strongest warning signs of a phishing email.",
+options:[
+"A sender address that does not match the district domain",
+"A request to act immediately or face consequences",
+"A message that includes a greeting",
+"An email that uses complete sentences"
+],
+answer:[0,1]
+},
+{
+type:"multi",
+q:"Select the two actions that best demonstrate responsible digital behavior.",
+options:[
+"Checking whether information comes from a credible original source",
+"Posting first and verifying later",
+"Thinking about how a comment may reflect on your professionalism",
+"Trusting a message because several people already shared it"
+],
+answer:[0,2]
+},
+{
+type:"single",
+q:"A message looks polished, includes a logo, and sounds professional, but asks you to verify your password through an attachment. What is the best conclusion?",
+options:[
+"The message should still be treated as suspicious because professional appearance does not prove legitimacy",
+"The logo makes the message trustworthy",
+"It is likely safe because the writing is formal",
+"Attachments are safe as long as the subject line looks official"
+],
+answer:0
+},
+{
+type:"single",
+q:"Which statement best captures the main lesson of this training?",
+options:[
+"Strong digital behavior depends on slowing down, examining evidence, and making thoughtful choices before clicking, sharing, or posting",
+"Online risks can usually be avoided if a message looks professional",
+"Deleting a post is enough to protect your online reputation",
+"Urgent requests should be handled quickly before verifying them"
+],
+answer:0
+}
+]
+}
+
+]
+
+function saveResponses(){
+  const current = sections[section]
+  if(!current) return
+
+  current.questions.forEach((q,i)=>{
+    const key = `${section}_${i}`
+
+    if(q.type==="single"){
+      const selected = document.querySelector(`input[name='q${section}_${i}']:checked`)
+      answers[key] = selected ? selected.value : null
+    }
+
+    if(q.type==="fill"){
+      const input = document.getElementById(`q${section}_${i}`)
+      answers[key] = input ? input.value : ""
+    }
+
+    if(q.type==="multi"){
+      const checked = Array.from(document.querySelectorAll(`input[name='q${section}_${i}']:checked`)).map(el=>Number(el.value))
+      answers[key] = checked
+    }
+
+    if(q.type==="drag"){
+      let result = {}
+      q.zones.forEach((zone,zoneIndex)=>{
+        const zoneEl = document.getElementById(`drop_${section}_${i}_${zoneIndex}`)
+        if(zoneEl){
+          result[zone] = Array.from(zoneEl.querySelectorAll(".dragItem")).map(el=>el.dataset.label)
+        }
+      })
+      answers[key] = result
+    }
+  })
+}
+
+function restoreResponses(){
+  const current = sections[section]
+  if(!current) return
+
+  current.questions.forEach((q,i)=>{
+    const key = `${section}_${i}`
+    const saved = answers[key]
+
+    if(q.type==="single" && saved !== undefined && saved !== null){
+      const radio = document.querySelector(`input[name='q${section}_${i}'][value='${saved}']`)
+      if(radio) radio.checked = true
+    }
+
+    if(q.type==="fill" && saved !== undefined){
+      const input = document.getElementById(`q${section}_${i}`)
+      if(input) input.value = saved
+    }
+
+    if(q.type==="multi" && Array.isArray(saved)){
+      saved.forEach(val=>{
+        const box = document.querySelector(`input[name='q${section}_${i}'][value='${val}']`)
+        if(box) box.checked = true
+      })
+    }
+
+    if(q.type==="drag" && saved){
+      q.zones.forEach((zone,zoneIndex)=>{
+        const zoneEl = document.getElementById(`drop_${section}_${i}_${zoneIndex}`)
+        const itemsInZone = saved[zone] || []
+        itemsInZone.forEach(label=>{
+          const item = document.querySelector(`.dragItem[data-label="${CSS.escape(label)}"]`)
+          if(item && zoneEl) zoneEl.appendChild(item)
+        })
+      })
+    }
+  })
+}
 
 function startGame(){
+  player = document.getElementById("name").value.trim()
 
-let name = document.getElementById("playerName").value;
+  if(player===""){
+    alert("Please enter your name")
+    return
+  }
 
-if(name === ""){
-alert("Please enter your name first.");
-return;
+  document.getElementById("start").classList.add("hidden")
+  document.getElementById("game").classList.remove("hidden")
+  renderSection()
 }
 
-alert("Welcome " + name + "! The game will begin.");
+function renderQuestion(q,i){
+  let html = `<div class='question'><b>Question ${i+1}</b><br><br>${q.q}<br>`
 
+  if(q.type==="single"){
+    q.options.forEach((o,j)=>{
+      html += `<label class="multiOption"><input type='radio' name='q${section}_${i}' value='${j}'> ${o}</label>`
+    })
+  }
+
+  if(q.type==="fill"){
+    html += `<input id='q${section}_${i}' placeholder='Type answer' style="padding:10px;font-size:15px;width:70%;margin-top:10px;">`
+  }
+
+  if(q.type==="multi"){
+    q.options.forEach((o,j)=>{
+      html += `<label class="multiOption"><input type='checkbox' name='q${section}_${i}' value='${j}'> ${o}</label>`
+    })
+  }
+
+  if(q.type==="drag"){
+    html += `<div class="dragBank">`
+    q.items.forEach((item,j)=>{
+      html += `<div class="dragItem" draggable="true" id="drag_${section}_${i}_${j}" data-answer="${item.target}" data-label="${item.text}">${item.text}</div>`
+    })
+    html += `</div>`
+
+    html += `<div class="dropZoneWrap">`
+    q.zones.forEach((zone,z)=>{
+      html += `<div class="dropZone" id="drop_${section}_${i}_${z}" data-zone="${zone}">
+        <h4>${zone}</h4>
+      </div>`
+    })
+    html += `</div>`
+  }
+
+  html += `</div>`
+  return html
 }
 
+function addDragEvents(){
+  const draggables = document.querySelectorAll(".dragItem")
+  const dropZones = document.querySelectorAll(".dropZone")
+
+  draggables.forEach(item=>{
+    item.addEventListener("dragstart", e=>{
+      e.dataTransfer.setData("text/plain", e.target.id)
+    })
+  })
+
+  dropZones.forEach(zone=>{
+    zone.addEventListener("dragover", e=>e.preventDefault())
+    zone.addEventListener("drop", e=>{
+      e.preventDefault()
+      const id = e.dataTransfer.getData("text/plain")
+      const dragged = document.getElementById(id)
+      if(dragged){
+        zone.appendChild(dragged)
+      }
+    })
+  })
+}
+
+function renderSection(){
+  let s = sections[section]
+  let html = s.text
+
+  s.questions.forEach((q,i)=>{
+    html += renderQuestion(q,i)
+  })
+
+  document.getElementById("content").innerHTML = html
+  document.getElementById("bar").style.width = (section/(sections.length-1)*100) + "%"
+  addDragEvents()
+  restoreResponses()
+}
+
+function prevSection(){
+  if(section>0){
+    saveResponses()
+    section--
+    renderSection()
+  }
+}
+
+function nextSection(){
+  saveResponses()
+
+  if(section < sections.length-1){
+    section++
+    renderSection()
+  } else {
+    showResults()
+  }
+}
+
+function isArrayEqual(a,b){
+  if(a.length !== b.length) return false
+  const aa = [...a].sort((x,y)=>x-y)
+  const bb = [...b].sort((x,y)=>x-y)
+  return aa.every((val,index)=>val===bb[index])
+}
+
+function calculateScore(){
+  let total = 0
+  let correct = 0
+
+  sections.forEach((sec,secIndex)=>{
+    sec.questions.forEach((q,qIndex)=>{
+      total++
+      const key = `${secIndex}_${qIndex}`
+      const response = answers[key]
+
+      if(q.type==="single"){
+        if(Number(response) === q.answer) correct++
+      }
+
+      if(q.type==="fill"){
+        if(typeof response === "string" && response.toLowerCase().includes(q.answer.toLowerCase())) correct++
+      }
+
+      if(q.type==="multi"){
+        if(Array.isArray(response) && isArrayEqual(response,q.answer)) correct++
+      }
+
+      if(q.type==="drag"){
+        let allCorrect = true
+        q.items.forEach(item=>{
+          const placed = response && response[item.target] ? response[item.target] : []
+          if(!placed.includes(item.text)) allCorrect = false
+        })
+        if(allCorrect) correct++
+      }
+    })
+  })
+
+  return {correct,total}
+}
+
+function showResults(){
+  document.getElementById("game").classList.add("hidden")
+  document.getElementById("results").classList.remove("hidden")
+
+  const result = calculateScore()
+  const percent = Math.round(result.correct / result.total * 100)
+
+  document.getElementById("scoreText").innerHTML = `${player} scored ${result.correct} out of ${result.total} (${percent}%)`
+
+  if(percent >= 80){
+    document.getElementById("certificate").classList.remove("hidden")
+    document.getElementById("certName").innerHTML = player
+    document.getElementById("date").innerHTML = new Date().toDateString()
+  }
+}
 </script>
-
 </body>
 </html>
