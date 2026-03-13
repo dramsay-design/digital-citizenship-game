@@ -164,7 +164,7 @@ input[type="text"], input[type="email"], input[type="search"], input[type="passw
 <div class="container">
 
   <div id="start" class="card">
-    <h1>District Internet Safety & Phishing Awareness Training</h1>
+    <h1>District Internet Safety &amp; Phishing Awareness Training</h1>
     <p>This professional training module helps staff identify phishing emails, suspicious internet behavior, and understand how online actions create a digital footprint.</p>
     <p>Participants will move through realistic scenarios designed to strengthen judgment, increase awareness of online risks, and build confidence in recognizing misleading information, suspicious requests, and digital habits that can affect both personal security and professional reputation.</p>
     <input id="name" placeholder="Enter your name" style="padding:10px;font-size:16px;width:60%">
@@ -289,6 +289,8 @@ const sections = [
       <p>Many phishing emails look professional and may include logos, urgent language, and topics such as payroll, benefits, HR, or account verification.</p>
       <p>District IT teams often warn staff about messages that appear legitimate on the surface but contain subtle warning signs, such as a suspicious sender domain, unexpected requests, unusual links, or pressure to act immediately.</p>
       <p>Phishing attacks are effective because they are designed to take advantage of routine workplace behavior. Staff members are used to responding quickly, reviewing forms, checking district systems, and opening messages related to payroll, benefits, or student communication. Attackers know this, so they often imitate ordinary school communication in order to lower a person's guard and push them into making a rushed decision.</p>
+      <p><b>Another important thing to remember is that you should never enter your password to "unlock" a document.</b> Legitimate organizations and school systems do not require staff to type passwords into emailed attachments or pop-up files in order to view a document. That is a common phishing tactic used to steal login credentials.</p>
+
       <div class="demoBox">
         <b>Demonstration 1: Suspicious HR Email</b>
         <div class="emailExample">From: payroll-update@district-payroll-secure.com
@@ -316,6 +318,7 @@ Due to a security update, all employees must verify their email accounts today. 
           <li>Administrators rarely ask staff to verify passwords through email.</li>
           <li>The message creates fear of consequences to force quick compliance.</li>
           <li>Attachments requesting login credentials are a common phishing tactic.</li>
+          <li>You should never enter your password to "unlock" a document.</li>
         </ul>
         <hr>
         <b>Demonstration 3: Bank Notification Email</b>
@@ -331,6 +334,7 @@ http://bank-account-verification.net</div>
           <li>Banks normally direct users to log in through their official website rather than an emailed link.</li>
         </ul>
       </div>
+
       <div class="warning">
         <b>Common phishing warning signs:</b>
         <ul>
@@ -339,6 +343,7 @@ http://bank-account-verification.net</div>
           <li>Requests for passwords or login credentials</li>
           <li>Links that lead to unfamiliar websites</li>
           <li>Unexpected messages about HR, payroll, or benefits</li>
+          <li>Documents or attachments asking you to enter your password to open them</li>
         </ul>
       </div>
     `,
@@ -523,7 +528,6 @@ http://bank-account-verification.net</div>
   }
 ];
 
-/* ------------------ SHUFFLE HELPERS ------------------ */
 function shuffleArray(arr){
   const copy = [...arr];
   for(let i = copy.length - 1; i > 0; i--){
@@ -558,12 +562,11 @@ function prepareQuestions(){
   });
 }
 
-/* ------------------ SAVE / RESTORE ------------------ */
 function saveResponses(){
   const current = sections[section];
   if(!current) return;
 
-  current.questions.forEach((q,i) => {
+  current.questions.forEach((q, i) => {
     const key = `${section}_${i}`;
 
     if(q.type === "single"){
@@ -577,8 +580,7 @@ function saveResponses(){
     }
 
     if(q.type === "multi"){
-      const checked = Array.from(document.querySelectorAll(`input[name='q${section}_${i}']:checked`))
-        .map(el => Number(el.value));
+      const checked = Array.from(document.querySelectorAll(`input[name='q${section}_${i}']:checked`)).map(el => Number(el.value));
       answers[key] = checked;
     }
 
@@ -599,7 +601,7 @@ function restoreResponses(){
   const current = sections[section];
   if(!current) return;
 
-  current.questions.forEach((q,i) => {
+  current.questions.forEach((q, i) => {
     const key = `${section}_${i}`;
     const saved = answers[key];
 
@@ -625,7 +627,8 @@ function restoreResponses(){
         const zoneEl = document.getElementById(`drop_${section}_${i}_${zoneIndex}`);
         const itemsInZone = saved[zone] || [];
         itemsInZone.forEach(label => {
-          const item = document.querySelector(`.dragItem[data-label="${label.replace(/"/g, '&quot;')}"]`);
+          const safeLabel = label.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+          const item = document.querySelector(`.dragItem[data-label="${safeLabel}"]`);
           if(item && zoneEl) zoneEl.appendChild(item);
         });
       });
@@ -633,7 +636,6 @@ function restoreResponses(){
   });
 }
 
-/* ------------------ GAME FLOW ------------------ */
 function startGame(){
   player = document.getElementById("name").value.trim();
   if(player === ""){
@@ -648,34 +650,34 @@ function startGame(){
   renderSection();
 }
 
-function renderQuestion(q,i){
-  let html = `<div class='question'><b>Question ${i+1}</b><br><br>${q.q}<br>`;
+function renderQuestion(q, i){
+  let html = `<div class="question"><b>Question ${i+1}</b><br><br>${q.q}<br>`;
 
   if(q.type === "single"){
-    q.options.forEach((o,j) => {
-      html += `<label class="multiOption"><input type='radio' name='q${section}_${i}' value='${j}'> ${o}</label>`;
+    q.options.forEach((o, j) => {
+      html += `<label class="multiOption"><input type="radio" name="q${section}_${i}" value="${j}"> ${o}</label>`;
     });
   }
 
   if(q.type === "fill"){
-    html += `<input id='q${section}_${i}' placeholder='Type answer' style="padding:10px;font-size:15px;width:70%;margin-top:10px;">`;
+    html += `<input id="q${section}_${i}" placeholder="Type answer" style="padding:10px;font-size:15px;width:70%;margin-top:10px;">`;
   }
 
   if(q.type === "multi"){
-    q.options.forEach((o,j) => {
-      html += `<label class="multiOption"><input type='checkbox' name='q${section}_${i}' value='${j}'> ${o}</label>`;
+    q.options.forEach((o, j) => {
+      html += `<label class="multiOption"><input type="checkbox" name="q${section}_${i}" value="${j}"> ${o}</label>`;
     });
   }
 
   if(q.type === "drag"){
     html += `<div class="dragBank">`;
-    q.items.forEach((item,j) => {
+    q.items.forEach((item, j) => {
       html += `<div class="dragItem" draggable="true" id="drag_${section}_${i}_${j}" data-answer="${item.target}" data-label="${item.text}">${item.text}</div>`;
     });
     html += `</div>`;
 
     html += `<div class="dropZoneWrap">`;
-    q.zones.forEach((zone,z) => {
+    q.zones.forEach((zone, z) => {
       html += `
         <div class="dropZone" id="drop_${section}_${i}_${z}" data-zone="${zone}">
           <h4>${zone}</h4>
@@ -713,11 +715,11 @@ function addDragEvents(){
 }
 
 function renderSection(){
-  let s = sections[section];
+  const s = sections[section];
   let html = s.text;
 
-  s.questions.forEach((q,i) => {
-    html += renderQuestion(q,i);
+  s.questions.forEach((q, i) => {
+    html += renderQuestion(q, i);
   });
 
   document.getElementById("content").innerHTML = html;
@@ -745,12 +747,11 @@ function nextSection(){
   }
 }
 
-/* ------------------ SCORING ------------------ */
-function isArrayEqual(a,b){
+function isArrayEqual(a, b){
   if(a.length !== b.length) return false;
-  const aa = [...a].sort((x,y) => x-y);
-  const bb = [...b].sort((x,y) => x-y);
-  return aa.every((val,index) => val === bb[index]);
+  const aa = [...a].sort((x, y) => x - y);
+  const bb = [...b].sort((x, y) => x - y);
+  return aa.every((val, index) => val === bb[index]);
 }
 
 function calculateScore(){
@@ -790,7 +791,7 @@ function calculateScore(){
     });
   });
 
-  return {correct, total};
+  return { correct, total };
 }
 
 function showResults(){
@@ -800,8 +801,7 @@ function showResults(){
   const result = calculateScore();
   const percent = Math.round(result.correct / result.total * 100);
 
-  document.getElementById("scoreText").innerHTML =
-    `${player} scored ${result.correct} out of ${result.total} (${percent}%)`;
+  document.getElementById("scoreText").innerHTML = `${player} scored ${result.correct} out of ${result.total} (${percent}%)`;
 
   if(percent >= 80){
     document.getElementById("certificate").classList.remove("hidden");
